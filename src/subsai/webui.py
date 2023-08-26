@@ -13,7 +13,7 @@ import sys
 import tempfile
 from base64 import b64encode
 from pathlib import Path
-
+from pyngrok import ngrok
 import pandas as pd
 import streamlit as st
 from pysubs2.time import ms_to_str, make_time
@@ -515,6 +515,14 @@ def run():
     if runtime.exists():
         webui()
     else:
+        auth_token = os.environ.get('NGROK_AUTH_TOKEN')
+        if auth_token: 
+            ngrok.set_auth_token(auth_token)
+            print("Ngrok authentication token set successfully.")
+        else:
+            print("Ngrok authentication token not found in environment variable.")
+        public_url = ngrok.connect(addr='8501')  # Replace with the port Streamlit is using
+        print('Public URL:', public_url)
         sys.argv = ["streamlit", "run", __file__, "--theme.base", "dark"] + sys.argv
         sys.exit(stcli.main())
 
