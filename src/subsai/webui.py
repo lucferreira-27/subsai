@@ -521,6 +521,7 @@ def run():
             print("Ngrok authentication token set successfully.")
         else:
             print("Ngrok authentication token not found in environment variable.")
+        ngrok.set_config(headers={'ngrok-skip-browser-warning': 'true'})
         public_url = ngrok.connect(addr='8501')  # Replace with the port Streamlit is using
         print('Public URL:', public_url)
         sys.argv = ["streamlit", "run", __file__, "--theme.base", "dark"] + sys.argv
